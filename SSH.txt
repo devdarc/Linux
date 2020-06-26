@@ -1,0 +1,150 @@
+SSH Secure Shell
+
+SSH, also known as Secure Shell or Secure Socket Shell, 
+is a network protocol that gives users, particularly system administrators, 
+a secure way to access a computer over an unsecured network
+
+ssh configuration file path  /etc/ssh/ssh_config
+
+command 
+
+ssh user@host-ip/hostname 
+
+eg 
+
+ssh dev@10.0.0.2
+
+-----------------------------------------------------------Password less login---------------------------------------------------------------------------
+
+Need to genrate key 
+ 
+Private Key ~/.ssh/id_rsa        ---Jumb(Master)
+Public Key ~/.ssh/id_rsa.pub     ----Hosts(Tragets)
+
+---Genrate Key--------
+
+command 
+
+ssh-keygen -t rsa
+
+Eg:
+
+[root@centos-01 ~]# ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa):          ----path where you need to save the key
+/root/.ssh/id_rsa already exists.
+Overwrite (y/n)? y				 		  -----You already have a key (if you want to create new key then y if not then n)
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:					  ---- password for the (if you want to give password for key so it will allways ask when you are using that key)
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:B0wpWSCUa9BguUB/IFAsr6xrh2LGaPpFMjOc6MPdDgA root@centos-01
+The key's randomart image is:
++---[RSA 2048]----+
+|+=+*o..+o.       |
+|o.* +.oo.        |
+|E+ + o .o        |
+|.oo.+    .       |
+|ooB..   S .      |
+|+.o*.    .       |
+|++.o..           |
+|+B.oo            |
+|Xoo  .           |
++----[SHA256]-----+
+
+
+Copy key to host(target) meachine
+
+command
+
+ssh-copy-id usename@hostip/hostname
+
+Eg:
+
+ssh-copy-id root@10.0.0.12
+/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/root/.ssh/id_rsa.pub"
+/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+root@10.0.0.12's password:														---Password of host meachine
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'root@10.0.0.12'"
+and check to make sure that only the key(s) you wanted were added.
+
+Done try loging to meachine
+
+[root@centos-01 ~]# ssh root@10.0.0.12
+Last login: Tue Jun 23 15:50:26 2020 from 10.0.0.9
+
+----------------------------------------------------x-----x-------x------x------x--------------------------------------------------------------------
+
+--------------------------------------------------------Copy file or dir through ssh-------------------------------------------------------------------------
+
+
+* Command (file cp)
+
+scp file-name username@hostip/hostname:path
+
+scp a.txt dev@10.0.0.12:/root
+
+Eg.
+
+[root@centos-01 ~]# scp a.txt dev@10.0.0.12:/home/dev
+dev@10.0.0.12's password:
+a.txt                                                                               100%    0     0.0KB/s   00:00
+[root@centos-01 ~]#
+[dev@centos-02 ~]$ ls /home/dev/
+a.txt 
+
+
+* Command (file dir)
+
+scp -r path username@hostip/hostname:/path
+
+Eg.
+
+[root@centos-01 ~]# scp -r deve dev@10.0.0.12:/home/dev
+dev@10.0.0.12's password:
+[root@centos-01 ~]#
+[dev@centos-02 ~]$ ls /home/dev/
+a.txt  deve
+
+
+----------------------------------------------------x-----x-------x------x------x--------------------------------------------------------------------
+-------------------------------------------------------- Allow user to take ssh-------------------------------------------------------------------------
+
+vi /etc/ssh/sshd_config
+
+AllowUsers root
+
+systemctl restrt sshd
+
+
+----------------------------------------------------x-----x-------x------x------x--------------------------------------------------------------------
+------------------------------------------------------- Deny root to take ssh-------------------------------------------------------------------------
+
+vi /etc/ssh/sshd_config
+
+PermitRootLogin no
+
+systemctl restrt sshd
+----------------------------------------------------x-----x-------x------x------x--------------------------------------------------------------------
+------------------------------------------------------- Change 22 port no-------------------------------------------------------------------------
+
+vi /etc/ssh/sshd_config
+
+change PORT 3456 
+
+systemctl restrt sshd
+
+check before 
+
+----------------------------------------------------x-----x-------x------x------x--------------------------------------------------------------------
+
+
+
+
+
+
