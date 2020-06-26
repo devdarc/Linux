@@ -1,0 +1,49 @@
+Syncing AD with Linux
+
+
+1. Install the required packages
+
+   yum install sssd realmd oddjob oddjob-mkhomedir adcli samba-common samba-common-tools krb5-workstation openldap-clients policycoreutils-python
+
+2. Add Adserver entry in /etc/hosts
+
+   vi /etc/hosts
+   10.0.0.10   Domin-01.aurascript.com  Domain-01
+
+3. try to ping Adserver 
+   
+   ping Domin-01.aurascript.com
+
+4. Joint the domain using Administrator or Administrator user account
+
+   realm join --user=Administrator Domain-01
+
+	Enter Administartor account password
+   
+5. Fire realm list coomand for List all configured domains for the system or all discovered and configured domains.
+	
+   realm list
+
+6. (Optinoal) Check the user in AD server 
+
+    id dev@auracript.com
+	
+    id dev@aurascript.com
+    uid=76401108(dev) gid=76400513(domain users) groups=76400513(domain users) 
+
+7. ** Remove fully qualified names
+
+    vi /etc/sssd/sssd.config
+
+     change to 
+     use_fully_qualified_names = False
+
+8.  chaneg path of home dir to 
+ 
+    vi /etc/sssd/sssd.config
+    fallback_homedir = /home/%u
+
+9.  systemctl restart sssd
+    systemctl status sssd
+
+10. Try using loging with AD username account
