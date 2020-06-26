@@ -33,14 +33,14 @@ Syncing AD with Linux
 
 7. ** Remove fully qualified names
 
-    vi /etc/sssd/sssd.config
+    vi /etc/sssd/sssd.conf
 
      change to 
      use_fully_qualified_names = False
 
 8.  chaneg path of home dir to 
  
-    vi /etc/sssd/sssd.config
+    vi /etc/sssd/sssd.conf
     fallback_homedir = /home/%u
 
 9.  systemctl restart sssd
