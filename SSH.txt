@@ -133,14 +133,33 @@ systemctl restrt sshd
 ----------------------------------------------------x-----x-------x------x------x--------------------------------------------------------------------
 ------------------------------------------------------- Change 22 port no-------------------------------------------------------------------------
 
-vi /etc/ssh/sshd_config
+1. vi /etc/ssh/sshd_config
 
-change PORT 3456 
+2. change PORT 58342 
 
-systemctl restrt sshd
+3. firewall-cmd --permanent --zone=public --add-port=58342/tcp
 
-check before 
+4. firewall-cmd --reload
 
+5. vi /usr/lib/firewalld/services/ssh.xml
+
+6. change PORTNO save the file.:q 
+ 
+7. semanage port -a -t ssh_port_t -p tcp 58342
+
+8. systemctl restrt sshd
+
+9. check before exiting the connection
+
+
+another way 
+
+AFTER setp 4 fire this command
+
+setenforce 0
+(Check Selinux is goen in Permissive (to chek fire command getenforce))
+
+then follow step 8 
 ----------------------------------------------------x-----x-------x------x------x--------------------------------------------------------------------
 
 
